@@ -1,35 +1,5 @@
 /*
-	#How to use:
 	
-	var myModel = function(){
-		ValidationModel.apply(this,arguments);
-		this.name = null;
-		this.age = null;
-		this.email = null;
-	};
-	myModel.prototype.validations={
-		name:{
-			rules: ['required'], //will give the default msg
-			controlName: "full name"
-		},
-		age:{
-			rules: ['required','number'],
-			messages: ["@controlName is mandatory", "@controlName must be a number"],
-			controlName: "age"
-		},
-		email: {
-			rules: ['email','custom'],
-			messages: ["@controlName is invalid"," "],
-			controlName: "email address",
-			custom: function(obj){
-				//do your stuff
-				return {
-					code: 121,
-					msg: "@controlName is taken already"
-				}
-			}
-		}
-	}
 */
 
 var ValidationModel = (function () {
