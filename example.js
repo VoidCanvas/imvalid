@@ -10,11 +10,19 @@ Person.prototype = Object.create(ValidationModel.prototype);
 
 Person.prototype.validations={
 	name:{
-		rules:['required'],
+		rules:[
+			{
+				ruleName: 'required'
+			}
+		],
 		controlName:"Name"
 	},
 	age:{
-		rules:['number'],
+		rules:[
+			{
+				ruleName:'number'
+			}
+		],
 		controlName:"Age"
 	}
 }
@@ -30,7 +38,14 @@ Adult.prototype = Object.create(Person.prototype);
 
 Adult.prototype.validations={
 	email:{
-		rules:['required','customEmail'],
+		rules:[
+			{
+				ruleName:'required'
+			},
+			{
+				ruleName:'customEmail'
+			}
+		],
 		customEmail:function (obj, email) {
 			if(!email || email.length<6)
 				return{
@@ -55,8 +70,12 @@ UnknownPerson.prototype.validations={
 	email:null,
 	name:null,
 	foundIn:{
-		rules : ["required"],
-		messages : ["Please provide @controlName"],
+		rules : [
+			{
+				ruleName: "required",
+				msg: "Please provide @controlName"
+			}
+		],
 		controlName : "Found in country"
 	}
 }

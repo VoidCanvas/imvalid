@@ -53,6 +53,17 @@ var ValidationModel = (function () {
 					return new ValidationError(controlName, msg, code);
 
 			return null;
+		},
+		string:function (property, controlName, msg) {
+			var code = 102;
+			if(!msg)
+				msg = "@controlName must be a string value";
+
+			if(property)
+				if(typeof property != "string")
+					return new ValidationError(controlName, msg, code);
+
+			return null;
 		}
 	};
 
@@ -110,15 +121,15 @@ var ValidationModel = (function () {
 				var validationRules = rulesObj.rules;
 				if(validationRules && validationRules.length){
 					validationRules.forEach(function (rule,i) {
-						if(rulesObj[rule]){
-							var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName,rulesObj[rule]);
+						if(rulesObj[rule.ruleName]){
+							var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName,rulesObj[rule.ruleName]);
 							if(error)
 								obj.validationErrors.push(error);
 						}
 						else
-							if(coreValidationRules[rule]){
-								var msg = rulesObj["messages"] && rulesObj["messages"][i] 
-								var error = coreValidationRules[rule](property,rulesObj.controlName,msg);
+							if(coreValidationRules[rule.ruleName]){
+								var msg = rule["msg"];
+								var error = coreValidationRules[rule.ruleName](property,rule.controlName || rulesObj.controlName,msg);
 								if(error)
 									obj.validationErrors.push(error);
 							}
