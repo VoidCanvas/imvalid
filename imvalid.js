@@ -110,6 +110,9 @@ var ValidationModel = (function () {
 			return null;
 		},
 		email:function (property, controlName, rule) {
+			if(!property)
+				return;
+			
 			var code = 13000;
 			var msg = rule["msg"] || "@controlName is invalid";
 
