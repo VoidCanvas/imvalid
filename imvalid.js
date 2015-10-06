@@ -33,8 +33,9 @@ var ValidationModel = (function () {
 			}
 			return null;
 		},
-		required:function (property, controlName, msg) {
-			var code = 100;
+		required:function (property, controlName, rule) {
+			var code = 10000;
+			var msg = rule["msg"];
 			if(!msg)
 				msg = "@controlName is required";
 
@@ -43,25 +44,74 @@ var ValidationModel = (function () {
 			
 			return null;
 		},
-		number:function (property, controlName, msg) {
-			var code = 101;
+		number:function (property, controlName, rule) {
+			var code = 11000;
+			var msg = rule["msg"];
 			if(!msg)
 				msg = "@controlName must be a number";
 
-			if(property)
-				if(typeof property != "number")
-					return new ValidationError(controlName, msg, code);
+			if(!property)
+				return;
+
+			if(typeof property != "number")
+				return new ValidationError(controlName, msg, code);
+
+			if(rule.min && rule.max){
+				var rangeCode=11003;
+				var rangeMsg = rule.rangeMsg || "@controlName should be in between "+rule.min+" & "+rule.max;
+				if(property>rule.max || property<rule.min)
+					return new ValidationError(controlName, rangeMsg, rangeCode);					
+			}
+			else{
+				if(rule.min){
+					var minCode=11001;
+					var minMsg = rule.minMsg || "@controlName should be greater than "+rule.min;
+					if(property < rule.min)
+						return new ValidationError(controlName, minMsg, minCode);					
+				}
+				if(rule.max){
+					var maxCode=11002;
+					var maxMsg = rule.maxMsg || "@controlName should be lesser than "+rule.max;
+					if(property > rule.max)
+						return new ValidationError(controlName, maxMsg, maxCode);					
+				}
+			}
 
 			return null;
 		},
-		string:function (property, controlName, msg) {
-			var code = 102;
+		string:function (property, controlName, rule) {
+			var code = 12000;
+			var msg = rule["msg"];
 			if(!msg)
 				msg = "@controlName must be a string value";
 
-			if(property)
-				if(typeof property != "string")
-					return new ValidationError(controlName, msg, code);
+			if(!property)
+				return;
+
+			if(typeof property != "string")
+				return new ValidationError(controlName, msg, code);
+			
+			if(rule.min && rule.max){
+				var rangeCode=12003;
+				var rangeMsg = rule.rangeMsg || "@controlName's length should be in between "+rule.min+" & "+rule.max;
+				if(property.length>rule.max || property.length<rule.min)
+					return new ValidationError(controlName, rangeMsg, rangeCode);					
+			}
+			else{
+				if(rule.min){
+					var minCode=12001;
+					var minMsg = rule.minMsg || "@controlName's length should be greater than "+rule.min;
+					if(property.length < rule.min)
+						return new ValidationError(controlName, minMsg, minCode);					
+				}
+				if(rule.max){
+					var maxCode=12002;
+					var maxMsg = rule.maxMsg || "@controlName's length should be lesser than "+rule.max;
+					if(property.length > rule.max)
+						return new ValidationError(controlName, maxMsg, maxCode);					
+				}
+			}
+
 
 			return null;
 		}
@@ -128,8 +178,7 @@ var ValidationModel = (function () {
 						}
 						else
 							if(coreValidationRules[rule.ruleName]){
-								var msg = rule["msg"];
-								var error = coreValidationRules[rule.ruleName](property,rule.controlName || rulesObj.controlName,msg);
+								var error = coreValidationRules[rule.ruleName](property,rule.controlName || rulesObj.controlName,rule);
 								if(error)
 									obj.validationErrors.push(error);
 							}

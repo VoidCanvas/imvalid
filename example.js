@@ -20,7 +20,9 @@ Person.prototype.validations={
 	age:{
 		rules:[
 			{
-				ruleName:'number'
+				ruleName:'number',
+				min:18,
+				max:60
 			}
 		],
 		controlName:"Age"
