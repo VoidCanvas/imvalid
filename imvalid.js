@@ -35,9 +35,7 @@ var ValidationModel = (function () {
 		},
 		required:function (property, controlName, rule) {
 			var code = 10000;
-			var msg = rule["msg"];
-			if(!msg)
-				msg = "@controlName is required";
+			var msg = rule["msg"] || "@controlName is required";
 
 			if(!property || !property.toString().trim()) //if nothing is inserted
 				return new ValidationError(controlName, msg, code);
@@ -46,9 +44,7 @@ var ValidationModel = (function () {
 		},
 		number:function (property, controlName, rule) {
 			var code = 11000;
-			var msg = rule["msg"];
-			if(!msg)
-				msg = "@controlName must be a number";
+			var msg = rule["msg"] || "@controlName must be a number";
 
 			if(!property)
 				return;
@@ -81,9 +77,7 @@ var ValidationModel = (function () {
 		},
 		string:function (property, controlName, rule) {
 			var code = 12000;
-			var msg = rule["msg"];
-			if(!msg)
-				msg = "@controlName must be a string value";
+			var msg = rule["msg"] || "@controlName must be a string value";
 
 			if(!property)
 				return;
@@ -114,7 +108,17 @@ var ValidationModel = (function () {
 
 
 			return null;
-		}
+		},
+		email:function (property, controlName, rule) {
+			var code = 13000;
+			var msg = rule["msg"] || "@controlName is invalid";
+
+			var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    		if(!re.test(property))
+				return new ValidationError(controlName, msg, code);
+			
+			return null;
+		},
 	};
 
 	//to clear errors
