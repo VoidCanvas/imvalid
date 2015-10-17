@@ -27,11 +27,18 @@ var ValidationModel = (function () {
 	var coreValidationRules = {
 		____custom____:function (obj, property, controlName, func) {
 			var errorObj = func(obj, property);
+			var errors = [];
+			
 			if(errorObj){
-				var error = new ValidationError(controlName, errorObj.msg, errorObj.code);
-				return error;
+				if(Array.isArray(errorObj)){
+					errorObj.forEach(function (obj) {
+						errors.push(new ValidationError(controlName, obj.msg, obj.code));
+					});
+				}
+				else
+					errors.push(new ValidationError(controlName, errorObj.msg, errorObj.code));
 			}
-			return null;
+			return errors;
 		},
 		required:function (property, controlName, rule) {
 			var code = 10000;
@@ -179,9 +186,9 @@ var ValidationModel = (function () {
 				if(validationRules && validationRules.length){
 					validationRules.forEach(function (rule,i) {
 						if(rulesObj[rule.ruleName]){
-							var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName,rulesObj[rule.ruleName]);
-							if(error)
-								obj.validationErrors.push(error);
+							var errors = coreValidationRules.____custom____(obj,property,rulesObj.controlName,rulesObj[rule.ruleName]);
+							if(errors.length)
+								obj.validationErrors = obj.validationErrors.concat(errors);
 						}
 						else
 							if(coreValidationRules[rule.ruleName]){
