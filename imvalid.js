@@ -32,7 +32,7 @@ var ValidationModel = (function () {
 			if(errorObj){
 				if(Array.isArray(errorObj)){
 					errorObj.forEach(function (obj) {
-						errors.push(new ValidationError(controlName, obj.msg, obj.code));
+						errors.push(obj);
 					});
 				}
 				else
