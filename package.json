@@ -1,0 +1,23 @@
+{
+  "name": "imvalid",
+  "version": "1.0.0",
+  "description": "This is a JavaScript library to make model validation super easy and managable",
+  "main": "imvalid-node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoidCanvas/imvalid.git"
+  },
+  "keywords": [
+    "imvalid",
+    "validation"
+  ],
+  "author": "Paul Shan <paul@voidcanvas.com> (http://voidcanvas.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VoidCanvas/imvalid/issues"
+  },
+  "homepage": "https://github.com/VoidCanvas/imvalid#readme"
+}
