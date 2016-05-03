@@ -128,6 +128,13 @@ var helper={
 			obj.hasChildErrors = obj.hasChildErrors || !property.validate();
 			//obj.validationErrors = obj.validationErrors.concat(property.validationErrors);
 		}
+		if(property && Array.isArray(property)){
+			property.forEach(function (propertyObject) {
+				if(propertyObject instanceof ValidationModel){
+					obj.hasChildErrors = obj.hasChildErrors || !propertyObject.validate();
+				}
+			})
+		}
 
 		return errorList;
 	}
