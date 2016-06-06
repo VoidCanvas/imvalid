@@ -114,7 +114,7 @@ var ValidationModel = (function () {
 				if(validationRules && validationRules.length){
 					validationRules.forEach(function (rule,i) {
 						if(rulesObj[rule]){
-							var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName,rulesObj[rule]);
+							var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName, (rulesObj[rule] || obj[rule]));
 							if(error)
 								obj.validationErrors.push(error);
 						}
