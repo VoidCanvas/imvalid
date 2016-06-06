@@ -28,16 +28,18 @@ var Adult = function (name, age, email) {
 
 Adult.prototype = Object.create(Person.prototype);
 
+Adult.prototype.customValidators = {
+	customEmail:function (obj, email) {
+		if(!email || email.length<6)
+			return{
+				code:1111,
+				msg:"email should be longer than 6 char"
+			}
+	}
+}
 Adult.prototype.validations={
 	email:{
 		rules:['required','customEmail'],
-		customEmail:function (obj, email) {
-			if(!email || email.length<6)
-				return{
-					code:1111,
-					msg:"email should be longer than 6 char"
-				}
-		},
 		controlName:"Email"
 	}
 }

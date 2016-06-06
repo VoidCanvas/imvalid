@@ -109,8 +109,9 @@ var helper={
 			var validationRules = rulesObj.rules;
 			if(validationRules && validationRules.length){
 				validationRules.forEach(function (rule,i) {
-					if(rulesObj[rule]){
-						var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName,(rulesObj[rule] || obj[rule]));
+					var customValidatorFunction = rulesObj[rule] || (obj.customValidators && obj.customValidators[rule]);
+					if(customValidatorFunction){
+						var error = coreValidationRules.____custom____(obj,property,rulesObj.controlName, customValidatorFunction);
 						if(error)
 							obj.validationErrors.push(error);
 					}
