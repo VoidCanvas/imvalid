@@ -74,6 +74,25 @@ var ValidationModel = (function () {
 				var errorList = helper.validateRules(this,property,rulesObj); //this function will validate and assign all errors to the validationErrors				
 			}
 		}
+
+		//property validation
+		for (var objProperty in this){
+			if(this.hasOwnProperty(objProperty) && !validations[objProperty]){
+				var objPropertyValue = this[objProperty];
+				if(Array.isArray(objPropertyValue)){
+					objPropertyValue.forEach(function (opv) {
+						if(opv instanceof this.constructor){
+							this.hasChildErrors = this.hasChildErrors || !opv.validate();
+						}
+					}.bind(this));
+				} else{
+					if(objPropertyValue instanceof this.constructor){
+						this.hasChildErrors = this.hasChildErrors || !objPropertyValue.validate();
+					}
+				}
+			}
+		}
+
 		if(!this.validationErrors.length && !this.hasChildErrors)
 			this.isValid=true;
 	

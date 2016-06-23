@@ -63,6 +63,7 @@ ValidationModel.prototype.validate = function() {
 	this.clearErrors();
 	this.hasChildErrors = false;
 	var validations = helper.getValidationRules(this); //to get proper validation rules set
+	
 	for(var validation in validations){
 		if(validations.hasOwnProperty(validation)){
 			var rulesObj = validations[validation];
@@ -70,6 +71,25 @@ ValidationModel.prototype.validate = function() {
 			var errorList = helper.validateRules(this,property,rulesObj); //this function will validate and assign all errors to the validationErrors				
 		}
 	}
+
+	//property validation
+	for (var objProperty in this){
+		if(this.hasOwnProperty(objProperty) && !validations[objProperty]){
+			var objPropertyValue = this[objProperty];
+			if(Array.isArray(objPropertyValue)){
+				objPropertyValue.forEach(function (opv) {
+					if(opv instanceof this.constructor){
+						this.hasChildErrors = this.hasChildErrors || !opv.validate();
+					}
+				}.bind(this));
+			} else{
+				if(objPropertyValue instanceof this.constructor){
+					this.hasChildErrors = this.hasChildErrors || !objPropertyValue.validate();
+				}
+			}
+		}
+	}
+
 	if(!this.validationErrors.length && !this.hasChildErrors)
 		this.isValid=true;
 
